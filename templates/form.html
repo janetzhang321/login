@@ -10,7 +10,6 @@
 	<h1> Greatest Form Ever! </h1>
 
 	<form action="/login/" method="POST">
-	<form action="/auth/" method="POST">
 
 		username: <input type="text" name="user">
 		<br>
@@ -18,15 +17,13 @@
 		password: <input type="password" name="pass">
 		<br>
 		<br>
-		<input type="submit" name="button" value="register">
+		<input type="submit" name="button" value="register" action="/auth/">
 		<br>
-		<input type="submit" name="button" value="login">
+		<input type="submit" name="button" value="login" action="/login/">
 		<br>
 		<br>
 		<h1> {{poo}} </h1>
 
-
-	</form>
 	</form>
 
 </body>
