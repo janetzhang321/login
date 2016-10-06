@@ -43,7 +43,7 @@ def login() :
 	print url_for("auth")
 	if request.form['button'] == "register":
 		print request.form['user']
-		if register.addUser(request.form['user'],request.form['pass']) == "account created!":
+		if register.addUser(request.form['user'],request.form['pass']) == "":
 		return render_template( 'auth.html', foo="account", poo=register.login(request.form['user'],request.form['pass']), goo=request.form['user'] )
 	return render_template( 'form.html', poo=register.login(request.form['user'],request.form['pass']) )
 
