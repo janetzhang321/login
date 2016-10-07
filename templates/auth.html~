@@ -8,7 +8,6 @@
 <body>
 
 	<h1> {{poo}} </h1>
-	<h2> Welcome {{goo}} </h2>
 
 </body>
 

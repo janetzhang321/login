@@ -18,7 +18,7 @@ def home() :
 			print "name: " + request.form['button']
 			return render_template('form.html', foo="submit form")
     elif request.method == 'GET':
-        return render_template('form.html', foo="submit form")
+      return render_template('form.html', foo="submit form")
 
 
 
@@ -41,11 +41,23 @@ def login() :
 	print url_for("login")
 	#the correct route of the function in your flask app
 	print url_for("auth")
+
 	if request.form['button'] == "register":
 		print request.form['user']
 		if register.addUser(request.form['user'],request.form['pass']) == "account created!":
-		return render_template( 'auth.html', foo="account", poo=register.login(request.form['user'],request.form['pass']), goo=request.form['user'] )
-	return render_template( 'form.html', poo=register.login(request.form['user'],request.form['pass']) )
+			return render_template( 'auth.html', foo="account", poo="account created!", goo=request.form['user']  )
+		else: 
+			return render_template( 'form.html', foo="account", poo=register.addUser(request.form['user'],request.form['pass']) )
+
+	elif request.form['button'] == "login":
+		if register.login(request.form['user'],request.form['pass']) == "successfully logged in":
+			print request.form['user']
+			return render_template( 'auth.html', poo=register.login(request.form['user'],request.form['pass']), goo=request.form['user'] )
+		else:
+			return render_template( 'form.html', poo=register.login(request.form['user'],request.form['pass']) )
+		
+		
+	return render_template( 'auth.html', foo="account", poo=register.login(request.form['user'],request.form['pass']), goo=request.form['user'] )
 
 
 
