@@ -16,9 +16,9 @@ def home() :
 	#User-Agent gives you the info the connection is coming from
     if request.method == 'POST':
 			print "name: " + request.form['button']
-			return render_template('form.html', foo="submit form")
+			return render_template('form.html', title="submit form")
     elif request.method == 'GET':
-      return render_template('form.html', foo="submit form")
+      return render_template('form.html', title="submit form")
 
 
 
@@ -29,10 +29,10 @@ def auth() :
 	if request.form['button'] == "login":
 		if register.login(request.form['user'],request.form['pass']) == "successfully logged in":
 			print request.form['user']
-			return render_template( 'auth.html', poo=register.login(request.form['user'],request.form['pass']), goo=request.form['user'] )
+			return render_template( 'auth.html', output=register.login(request.form['user'],request.form['pass']), name=request.form['user'] )
 		else:
-			return render_template( 'form.html', poo=register.login(request.form['user'],request.form['pass']) )
-	return render_template( 'form.html', foo="account", poo=register.addUser(request.form['user'],request.form['pass']) )
+			return render_template( 'form.html', outputput=register.login(request.form['user'],request.form['pass']) )
+	return render_template( 'form.html', title="account", output=register.addUser(request.form['user'],request.form['pass']) )
 
 
 @app.route("/login/", methods = ['POST'])
@@ -45,19 +45,19 @@ def login() :
 	if request.form['button'] == "register":
 		print request.form['user']
 		if register.addUser(request.form['user'],request.form['pass']) == "account created!":
-			return render_template( 'auth.html', foo="account", poo="account created!", goo=request.form['user']  )
+			return render_template( 'auth.html', title="account", output="account created!", name=request.form['user']  )
 		else: 
-			return render_template( 'form.html', foo="account", poo=register.addUser(request.form['user'],request.form['pass']) )
+			return render_template( 'form.html', title="account", output=register.addUser(request.form['user'],request.form['pass']) )
 
 	elif request.form['button'] == "login":
 		if register.login(request.form['user'],request.form['pass']) == "successfully logged in":
 			print request.form['user']
-			return render_template( 'auth.html', poo=register.login(request.form['user'],request.form['pass']), goo=request.form['user'] )
+			return render_template( 'auth.html', output=register.login(request.form['user'],request.form['pass']), name=request.form['user'] )
 		else:
-			return render_template( 'form.html', poo=register.login(request.form['user'],request.form['pass']) )
+			return render_template( 'form.html', output=register.login(request.form['user'],request.form['pass']) )
 		
 		
-	return render_template( 'auth.html', foo="account", poo=register.login(request.form['user'],request.form['pass']), goo=request.form['user'] )
+	return render_template( 'auth.html', title="account", output=register.login(request.form['user'],request.form['pass']), name=request.form['user'] )
 
 
 
