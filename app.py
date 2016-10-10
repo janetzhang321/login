@@ -1,7 +1,7 @@
 #Janet Zhang
 #Pd 6 SoftDev DW
 
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request, url_for, session, redirect
 from utils import register
 import cgi
 
@@ -15,51 +15,55 @@ def home() :
 	#python eqiv of toString, printing an object
 	#User-Agent gives you the info the connection is coming from
     if request.method == 'POST':
-			print "name: " + request.form['button']
-			return render_template('form.html', title="submit form")
+		session.pop(user,None)
+		print "name: " + request.form['button']
+		return render_template('form.html', title="submit form")
     elif request.method == 'GET':
-      return render_template('form.html', title="submit form")
+		return render_template('form.html', title="submit form")
+
+@app.route('/getsession/')
+def getsession() :
+	if 'user' in session:
+		return session['user']
+	return 'not logged in'
+
+@app.route('/dropsession/')
+def dropsession() :
+	session.pop('user',None)
+	return 'Dropped!'
 
 
-
-
-@app.route("/auth/", methods = ['POST'])
+@app.route("/auth/", methods = ['GET'])
 def auth() :
-	print "name from auth: " + request.form['button']
-	if request.form['button'] == "login":
-		if register.login(request.form['user'],request.form['pass']) == "successfully logged in":
-			print request.form['user']
-			return render_template( 'auth.html', output=register.login(request.form['user'],request.form['pass']), name=request.form['user'] )
-		else:
-			return render_template( 'form.html', outputput=register.login(request.form['user'],request.form['pass']) )
-	return render_template( 'form.html', title="account", output=register.addUser(request.form['user'],request.form['pass']) )
+	if 'user' in session:
+		#didn't know how to access form info form login page to auth so I hardcoded the output
+		return render_template( 'auth.html', name=session['user'], output="successfully logged in" )
+		
+	else:
+		return render_template( 'form.html', title="account" )
 
-
-@app.route("/login/", methods = ['POST'])
+@app.route("/login/", methods = ['POST', 'GET'])
 def login() :
 	print "name from login: " + request.form['button']
-	print url_for("login")
-	#the correct route of the function in your flask app
-	print url_for("auth")
-
+	#register does not create session
 	if request.form['button'] == "register":
-		print request.form['user']
 		if register.addUser(request.form['user'],request.form['pass']) == "account created!":
-			return render_template( 'auth.html', title="account", output="account created!", name=request.form['user']  )
+			return render_template( 'form.html', title="account", output="account created!", name=request.form['user']  )
 		else: 
+			#register fails
 			return render_template( 'form.html', title="account", output=register.addUser(request.form['user'],request.form['pass']) )
-
+	#login creates session if correct
 	elif request.form['button'] == "login":
 		if register.login(request.form['user'],request.form['pass']) == "successfully logged in":
-			print request.form['user']
-			return render_template( 'auth.html', output=register.login(request.form['user'],request.form['pass']), name=request.form['user'] )
+			#create a session
+			session['user']=request.form['user']
+			return redirect(url_for("auth"))
 		else:
+			#login fails
 			return render_template( 'form.html', output=register.login(request.form['user'],request.form['pass']) )
 		
-		
-	return render_template( 'auth.html', title="account", output=register.login(request.form['user'],request.form['pass']), name=request.form['user'] )
-
-
+	#regular login page
+	return render_template( 'form.html', title="account" )
 
 
 if __name__ == "__main__": 
